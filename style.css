@@ -1,0 +1,539 @@
+/* =========================
+   GENERAL STYLING
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f9f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+nav {
+    background-color: #1b5e20;
+    color: white;
+    padding: 15px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h2 {
+    font-size: 25px;
+}
+
+nav a {
+    color: white;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #b9f6ca;
+}
+
+
+/* =========================
+   HOME HERO SECTION
+========================= */
+
+.hero {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    padding: 60px 10%;
+    background: linear-gradient(
+        rgba(27, 94, 32, 0.85),
+        rgba(46, 125, 50, 0.85)
+    );
+    color: white;
+}
+
+.hero div {
+    max-width: 650px;
+}
+
+.hero h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn,
+button {
+    display: inline-block;
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn:hover,
+button:hover {
+    background-color: #1b5e20;
+}
+
+.secondary {
+    background-color: white;
+    color: #2e7d32;
+    margin-left: 10px;
+}
+
+.secondary:hover {
+    background-color: #e8f5e9;
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+.features {
+    padding: 60px 8%;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 32px;
+    margin-bottom: 35px;
+    color: #1b5e20;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: white;
+    width: 300px;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    color: #2e7d32;
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: #555;
+}
+
+
+/* =========================
+   NORMAL PAGE
+========================= */
+
+.page {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 40px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.page h1 {
+    color: #1b5e20;
+    margin-bottom: 25px;
+}
+
+.page h2 {
+    color: #2e7d32;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.page p {
+    margin-bottom: 15px;
+}
+
+.page ul {
+    padding-left: 25px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-container {
+    width: 450px;
+    max-width: 90%;
+    margin: 50px auto;
+    padding: 35px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #1b5e20;
+    margin-bottom: 25px;
+}
+
+.form-container label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-container input,
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.form-container textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-container button {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.form-container p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.form-container a {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard {
+    padding: 50px 8%;
+}
+
+.dashboard h1 {
+    color: #1b5e20;
+    margin-bottom: 30px;
+}
+
+.dashboard-cards {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.dashboard-card {
+    background-color: white;
+    width: 250px;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h2 {
+    font-size: 40px;
+    color: #2e7d32;
+}
+
+.dashboard-card p {
+    font-weight: bold;
+}
+
+.request-section {
+    margin-top: 40px;
+    background-color: white;
+    padding: 35px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.request-section h2 {
+    color: #1b5e20;
+    margin-bottom: 15px;
+}
+
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact-box {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #e8f5e9;
+    border-radius: 10px;
+}
+
+.contact-box h3 {
+    color: #1b5e20;
+    margin-top: 15px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    background-color: #1b5e20;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav a {
+        margin: 5px;
+        display: inline-block;
+    }
+
+    .hero h1 {
+        font-size: 35px;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    .cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dashboard-cards {
+        justify-content: center;
+    }
+
+    .secondary {
+        margin-left: 0;
+    }
+}
+/* ============================= */
+/* EXTRA DASHBOARD FEATURES */
+/* ============================= */
+
+.active-account {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+
+/* UPCOMING PICKUP */
+
+.upcoming-section,
+.notification-section,
+.progress-section,
+.recycling-center {
+    background: white;
+    padding: 30px;
+    margin-top: 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.upcoming-section h2,
+.notification-section h2,
+.progress-section h2,
+.recycling-center h2 {
+    color: #1b5e20;
+    margin-bottom: 20px;
+}
+
+
+.pickup-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px;
+    background: #e8f5e9;
+    border-radius: 10px;
+}
+
+.pickup-box h3 {
+    color: #2e7d32;
+    margin-bottom: 10px;
+}
+
+.pickup-box p {
+    margin: 7px 0;
+}
+
+
+/* NOTIFICATIONS */
+
+.notifications {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notification {
+    background: #f1f8e9;
+    border-left: 5px solid #43a047;
+    padding: 15px;
+    border-radius: 7px;
+}
+
+.success-notification {
+    background: #e8f5e9;
+}
+
+
+/* PROGRESS */
+
+.progress-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.progress-grid div {
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+    padding: 25px;
+    background: #e8f5e9;
+    border-radius: 10px;
+}
+
+.progress-grid span {
+    font-size: 35px;
+}
+
+.progress-grid h3 {
+    color: #1b5e20;
+    font-size: 25px;
+    margin: 10px 0;
+}
+
+
+/* RECYCLING CENTER */
+
+.recycling-center {
+    margin-top: 35px;
+}
+
+.recycling-center > p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.recycling-steps {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.recycling-steps div {
+    flex: 1;
+    min-width: 200px;
+    padding: 20px;
+    background: #f1f8e9;
+    border-radius: 10px;
+}
+
+.recycling-steps span {
+    font-size: 30px;
+}
+
+.recycling-steps h3 {
+    color: #2e7d32;
+    margin: 10px 0;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .pickup-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .progress-grid {
+        flex-direction: column;
+    }
+
+    .recycling-steps {
+        flex-direction: column;
+    }
+
+}
+/* ================= ADMIN PANEL ================= */
+
+.complete-btn {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.complete-btn:hover {
+    background-color: #1b5e20;
+}
+
+.request-table td {
+    vertical-align: middle;
+}
+
+.admin-title {
+    color: #1b5e20;
+}
