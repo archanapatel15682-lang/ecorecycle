@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - EcoRecycle</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav>
+    <h2>♻️ EcoRecycle</h2>
+
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('pickup_request') }}">Request Pickup</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+
+<section class="dashboard">
+
+    <h1>Welcome, {{ user_name }}! 👋</h1>
+
+    <p class="dashboard-intro">
+        Manage your plastic waste collection and recycling activities.
+    </p>
+
+
+    <!-- PROFILE -->
+
+    <div class="dashboard-profile">
+
+        <div>
+            <h2>👤 My Profile</h2>
+
+            <p>
+                <strong>Name:</strong>
+                {{ user_name }}
+            </p>
+
+            <p>
+                <strong>Account:</strong>
+                <span class="active-account">Active</span>
+            </p>
+        </div>
+
+        <a href="{{ url_for('pickup_request') }}" class="btn">
+            ♻️ Request Pickup
+        </a>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <h2 class="section-title">
+        📊 Collection Overview
+    </h2>
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card">
+            <div class="dashboard-icon">📋</div>
+            <h2>{{ total_requests }}</h2>
+            <p>Total Requests</p>
+        </div>
+
+
+        <div class="dashboard-card">
+            <div class="dashboard-icon">⏳</div>
+            <h2>{{ pending_requests }}</h2>
+            <p>Pending Pickup</p>
+        </div>
+
+
+        <div class="dashboard-card">
+            <div class="dashboard-icon">✅</div>
+            <h2>{{ completed_requests }}</h2>
+            <p>Completed Pickup</p>
+        </div>
+
+
+        <div class="dashboard-card">
+            <div class="dashboard-icon">♻️</div>
+            <h2>{{ recycled_kg }} KG</h2>
+            <p>Plastic Recycled</p>
+        </div>
+
+    </div>
+
+
+    <!-- UPCOMING PICKUP -->
+
+    <div class="upcoming-section">
+
+        <h2>🚚 Upcoming Pickup</h2>
+
+        {% if upcoming_pickup %}
+
+        <div class="pickup-box">
+
+            <div>
+                <h3>♻️ {{ upcoming_pickup["waste_type"] }}</h3>
+
+                <p>
+                    <strong>Quantity:</strong>
+                    {{ upcoming_pickup["quantity"] }} KG
+                </p>
+
+                <p>
+                    <strong>Pickup Date:</strong>
+                    {{ upcoming_pickup["pickup_date"] }}
+                </p>
+
+                <p>
+                    <strong>Address:</strong>
+                    {{ upcoming_pickup["address"] }}
+                </p>
+            </div>
+
+            <span class="status pending">
+                ⏳ {{ upcoming_pickup["status"] }}
+            </span>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+            <h3>📭 No Upcoming Pickup</h3>
+            <p>You don't have any upcoming pickup scheduled.</p>
+
+            <a href="{{ url_for('pickup_request') }}" class="btn">
+                Schedule Pickup
+            </a>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- NOTIFICATIONS -->
+
+    <div class="notification-section">
+
+        <h2>🔔 Notifications</h2>
+
+        <div class="notifications">
+
+            {% if upcoming_pickup %}
+            <div class="notification">
+                🚚 Your pickup is scheduled for
+                <strong>{{ upcoming_pickup["pickup_date"] }}</strong>.
+            </div>
+            {% endif %}
+
+
+            {% if completed_requests > 0 %}
+            <div class="notification success-notification">
+                ♻️ Your plastic recycling activity has been updated.
+            </div>
+            {% endif %}
+
+
+            {% if total_requests > 0 %}
+            <div class="notification">
+                📋 You have submitted
+                <strong>{{ total_requests }}</strong>
+                pickup request(s).
+            </div>
+            {% endif %}
+
+
+            {% if total_requests == 0 %}
+            <div class="notification">
+                💡 Start recycling by submitting your first pickup request.
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- RECYCLING PROGRESS -->
+
+    <div class="progress-section">
+
+        <h2>📈 My Recycling Progress</h2>
+
+        <div class="progress-grid">
+
+            <div>
+                <span>📦</span>
+                <h3>{{ total_kg }} KG</h3>
+                <p>Total Plastic Collected</p>
+            </div>
+
+
+            <div>
+                <span>♻️</span>
+                <h3>{{ recycled_kg }} KG</h3>
+                <p>Plastic Recycled</p>
+            </div>
+
+
+            <div>
+                <span>🚚</span>
+                <h3>{{ completed_requests }}</h3>
+                <p>Successful Pickups</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <h2 class="section-title">
+        ⚡ Quick Actions
+    </h2>
+
+    <div class="quick-actions">
+
+        <a href="{{ url_for('pickup_request') }}"
+           class="action-card">
+
+            <span>♻️</span>
+
+            <h3>Request Pickup</h3>
+
+            <p>
+                Schedule plastic waste collection.
+            </p>
+
+        </a>
+
+
+        <a href="{{ url_for('about') }}"
+           class="action-card">
+
+            <span>🌱</span>
+
+            <h3>Learn Recycling</h3>
+
+            <p>
+                Learn about plastic recycling.
+            </p>
+
+        </a>
+
+
+        <a href="{{ url_for('contact') }}"
+           class="action-card">
+
+            <span>📞</span>
+
+            <h3>Contact Support</h3>
+
+            <p>
+                Need help? Contact our team.
+            </p>
+
+        </a>
+
+    </div>
+
+
+    <!-- REQUEST HISTORY -->
+
+    <div class="request-section">
+
+        <h2>📋 My Pickup Requests</h2>
+
+        {% if requests %}
+
+        <div class="table-container">
+
+            <table class="request-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Waste Type</th>
+                        <th>Quantity</th>
+                        <th>Pickup Date</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for req in requests %}
+
+                    <tr>
+
+                        <td>
+                            {{ req["waste_type"] }}
+                        </td>
+
+                        <td>
+                            {{ req["quantity"] }} KG
+                        </td>
+
+                        <td>
+                            {{ req["pickup_date"] }}
+                        </td>
+
+                        <td>
+
+                            {% if req["status"] == "Completed" %}
+
+                            <span class="status completed">
+                                ✅ Completed
+                            </span>
+
+                            {% else %}
+
+                            <span class="status pending">
+                                ⏳ Pending
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+
+            <h3>📭 No Pickup Requests</h3>
+
+            <p>
+                You haven't submitted any plastic waste pickup request yet.
+            </p>
+
+            <a href="{{ url_for('pickup_request') }}"
+               class="btn">
+                Request Your First Pickup
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- RECYCLING CENTER -->
+
+    <div class="recycling-center">
+
+        <h2>🏭 About Recycling Center</h2>
+
+        <p>
+            Our recycling process helps convert collected plastic
+            waste into reusable materials.
+        </p>
+
+
+        <div class="recycling-steps">
+
+            <div>
+                <span>🚚</span>
+                <h3>1. Collection</h3>
+                <p>Plastic waste is collected from users.</p>
+            </div>
+
+
+            <div>
+                <span>🔎</span>
+                <h3>2. Sorting</h3>
+                <p>Different types of plastic are separated.</p>
+            </div>
+
+
+            <div>
+                <span>🧼</span>
+                <h3>3. Cleaning</h3>
+                <p>Plastic waste is cleaned properly.</p>
+            </div>
+
+
+            <div>
+                <span>⚙️</span>
+                <h3>4. Processing</h3>
+                <p>Plastic is processed into reusable material.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECYCLING TIPS -->
+
+    <div class="tips-section">
+
+        <h2>💡 Recycling Tips</h2>
+
+        <ul>
+
+            <li>♻️ Separate plastic waste from other waste.</li>
+
+            <li>🧴 Clean bottles and containers before recycling.</li>
+
+            <li>🚫 Avoid unnecessary single-use plastic.</li>
+
+            <li>📦 Keep recyclable materials dry and clean.</li>
+
+            <li>🌱 Reuse plastic items whenever possible.</li>
+
+            <li>🏭 Give plastic waste to proper recycling centers.</li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ENVIRONMENTAL IMPACT -->
+
+    <div class="impact-section">
+
+        <h2>🌍 Your Environmental Impact</h2>
+
+        <div class="impact-cards">
+
+            <div>
+                <span>♻️</span>
+
+                <h3>{{ recycled_kg }} KG Recycled</h3>
+
+                <p>
+                    Your recycling activity helps reduce plastic waste.
+                </p>
+            </div>
+
+
+            <div>
+                <span>🌱</span>
+
+                <h3>Cleaner Environment</h3>
+
+                <p>
+                    Proper waste collection helps keep surroundings cleaner.
+                </p>
+            </div>
+
+
+            <div>
+                <span>🌍</span>
+
+                <h3>Greener Future</h3>
+
+                <p>
+                    Every recycling action contributes to a better future.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 EcoRecycle |
+        Plastic Waste Collection & Recycling
+    </p>
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - EcoRecycle</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav>
+    <h2>♻️ EcoRecycle Admin</h2>
+
+    <div>
+        <a href="/">Home</a>
+        <a href="/login">User Login</a>
+    </div>
+</nav>
+
+
+<section class="form-container">
+
+    <h1>🔐 Admin Login</h1>
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <form action="{{ url_for('admin_login') }}"
+          method="POST">
+
+        <label>Admin Email</label>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter admin email"
+            required
+        >
+
+
+        <label>Admin Password</label>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter admin password"
+            required
+        >
+
+
+        <button type="submit">
+            Login as Admin
+        </button>
+
+    </form>
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 EcoRecycle |
+        Admin Panel
+    </p>
+
+</footer>
+
+</body>
+</html>

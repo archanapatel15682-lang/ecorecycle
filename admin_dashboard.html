@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - EcoRecycle</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+    <h2>♻️ EcoRecycle Admin</h2>
+
+    <div>
+
+        <a href="{{ url_for('admin_dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="/">
+            Website
+        </a>
+
+        <a href="{{ url_for('admin_logout') }}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section class="dashboard">
+
+    <h1>Admin Dashboard 👨‍💼</h1>
+
+    <p class="dashboard-intro">
+        Manage plastic waste pickup and recycling requests.
+    </p>
+
+
+    <!-- STATISTICS -->
+
+    <div class="dashboard-cards">
+
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                📋
+            </div>
+
+            <h2>
+                {{ total_requests }}
+            </h2>
+
+            <p>
+                Total Requests
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                ⏳
+            </div>
+
+            <h2>
+                {{ pending_requests }}
+            </h2>
+
+            <p>
+                Pending
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                ✅
+            </div>
+
+            <h2>
+                {{ completed_requests }}
+            </h2>
+
+            <p>
+                Completed
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                ♻️
+            </div>
+
+            <h2>
+                {{ recycled_kg }} KG
+            </h2>
+
+            <p>
+                Plastic Recycled
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- REQUESTS -->
+
+    <div class="request-section">
+
+        <h2>
+            📋 Pickup Requests
+        </h2>
+
+
+        {% if requests %}
+
+        <div class="table-container">
+
+            <table class="request-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>User</th>
+
+                        <th>Phone</th>
+
+                        <th>Waste</th>
+
+                        <th>Quantity</th>
+
+                        <th>Pickup Date</th>
+
+                        <th>Address</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for req in requests %}
+
+                <tr>
+
+
+                    <td>
+                        {{ req["name"] }}
+                    </td>
+
+
+                    <td>
+                        {{ req["phone"] }}
+                    </td>
+
+
+                    <td>
+                        {{ req["waste_type"] }}
+                    </td>
+
+
+                    <td>
+                        {{ req["quantity"] }} KG
+                    </td>
+
+
+                    <td>
+                        {{ req["pickup_date"] }}
+                    </td>
+
+
+                    <td>
+                        {{ req["address"] }}
+                    </td>
+
+
+                    <td>
+
+                        {% if req["status"] == "Completed" %}
+
+                        <span class="status completed">
+                            ✅ Completed
+                        </span>
+
+                        {% else %}
+
+                        <span class="status pending">
+                            ⏳ Pending
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        {% if req["status"] != "Completed" %}
+
+                        <form
+                            action="{{ url_for('complete_pickup', request_id=req['id']) }}"
+                            method="POST"
+                        >
+
+                            <button
+                                type="submit"
+                                class="complete-btn"
+                            >
+                                ✅ Complete
+                            </button>
+
+                        </form>
+
+                        {% else %}
+
+                        <strong>
+                            ♻️ Recycled
+                        </strong>
+
+                        {% endif %}
+
+                    </td>
+
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-box">
+
+            <h3>
+                📭 No Requests
+            </h3>
+
+            <p>
+                No pickup requests have been submitted yet.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 EcoRecycle |
+        Admin Panel
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
