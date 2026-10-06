@@ -6,8 +6,11 @@ from datetime import date
 app = Flask(__name__)
 app.secret_key = "ecorecycle_secret_key_2026"
 
+ADMIN_EMAIL = "admin@ecorecycle.com"
+ADMIN_PASSWORD = "admin123"
 
-# ================= DATABASE =================
+
+# ---------------- DATABASE ----------------
 
 def get_db():
     conn = sqlite3.connect("database.db")
@@ -16,7 +19,6 @@ def get_db():
 
 
 def create_database():
-
     conn = get_db()
 
     conn.execute("""
@@ -47,21 +49,26 @@ def create_database():
     conn.close()
 
 
-# ================= HOME =================
+# IMPORTANT FOR RENDER
+# Database will be created when Flask/Gunicorn starts.
+create_database()
+
+
+# ---------------- HOME ----------------
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-# ================= ABOUT =================
+# ---------------- ABOUT ----------------
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
 
-# ================= REGISTER =================
+# ---------------- REGISTER ----------------
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -86,7 +93,6 @@ def register():
         conn = get_db()
 
         try:
-
             conn.execute("""
                 INSERT INTO users
                 (name, email, phone, password)
@@ -101,13 +107,10 @@ def register():
             conn.commit()
 
             flash("Registration successful! Please login.")
-
             return redirect(url_for("login"))
 
         except sqlite3.IntegrityError:
-
             flash("This email is already registered.")
-
             return redirect(url_for("register"))
 
         finally:
@@ -116,7 +119,7 @@ def register():
     return render_template("register.html")
 
 
-# ================= LOGIN =================
+# ---------------- LOGIN ----------------
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -127,9 +130,7 @@ def login():
         password = request.form.get("password", "")
 
         if not email or not password:
-
             flash("Please enter email and password.")
-
             return redirect(url_for("login"))
 
         conn = get_db()
@@ -143,15 +144,11 @@ def login():
         conn.close()
 
         if user is None:
-
             flash("Email is not registered.")
-
             return redirect(url_for("login"))
 
         if not check_password_hash(user["password"], password):
-
             flash("Incorrect password.")
-
             return redirect(url_for("login"))
 
         session["user_id"] = user["id"]
@@ -165,7 +162,7 @@ def login():
     return render_template("login.html")
 
 
-# ================= DASHBOARD =================
+# ---------------- DASHBOARD ----------------
 
 @app.route("/dashboard")
 def dashboard():
@@ -177,15 +174,12 @@ def dashboard():
 
     conn = get_db()
 
-    # Total requests
     total_requests = conn.execute("""
         SELECT COUNT(*) AS total
         FROM pickup_requests
         WHERE user_id = ?
     """, (user_id,)).fetchone()["total"]
 
-
-    # Pending requests
     pending_requests = conn.execute("""
         SELECT COUNT(*) AS total
         FROM pickup_requests
@@ -193,8 +187,6 @@ def dashboard():
         AND status = 'Pending'
     """, (user_id,)).fetchone()["total"]
 
-
-    # Completed requests
     completed_requests = conn.execute("""
         SELECT COUNT(*) AS total
         FROM pickup_requests
@@ -202,16 +194,12 @@ def dashboard():
         AND status = 'Completed'
     """, (user_id,)).fetchone()["total"]
 
-
-    # Total plastic collected
     total_kg = conn.execute("""
         SELECT COALESCE(SUM(quantity), 0) AS total
         FROM pickup_requests
         WHERE user_id = ?
     """, (user_id,)).fetchone()["total"]
 
-
-    # Plastic actually recycled
     recycled_kg = conn.execute("""
         SELECT COALESCE(SUM(quantity), 0) AS total
         FROM pickup_requests
@@ -219,8 +207,6 @@ def dashboard():
         AND status = 'Completed'
     """, (user_id,)).fetchone()["total"]
 
-
-    # All requests
     requests = conn.execute("""
         SELECT *
         FROM pickup_requests
@@ -228,8 +214,6 @@ def dashboard():
         ORDER BY pickup_date ASC
     """, (user_id,)).fetchall()
 
-
-    # Upcoming pickup
     upcoming_pickup = conn.execute("""
         SELECT *
         FROM pickup_requests
@@ -238,34 +222,27 @@ def dashboard():
         AND pickup_date >= ?
         ORDER BY pickup_date ASC
         LIMIT 1
-    """, (user_id, str(date.today()))).fetchone()
-
+    """, (
+        user_id,
+        str(date.today())
+    )).fetchone()
 
     conn.close()
 
-
     return render_template(
         "dashboard.html",
-
         user_name=session.get("user_name"),
-
         total_requests=total_requests,
-
         pending_requests=pending_requests,
-
         completed_requests=completed_requests,
-
         total_kg=round(total_kg, 1),
-
         recycled_kg=round(recycled_kg, 1),
-
         requests=requests,
-
         upcoming_pickup=upcoming_pickup
     )
 
 
-# ================= PICKUP REQUEST =================
+# ---------------- PICKUP REQUEST ----------------
 
 @app.route("/request", methods=["GET", "POST"])
 def pickup_request():
@@ -273,43 +250,30 @@ def pickup_request():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-
     if request.method == "POST":
 
         waste_type = request.form.get("waste_type", "").strip()
-
         quantity = request.form.get("quantity", "").strip()
-
         address = request.form.get("address", "").strip()
-
         pickup_date = request.form.get("pickup_date", "").strip()
-
         message = request.form.get("message", "").strip()
 
-
         if not waste_type or not quantity or not address or not pickup_date:
-
             flash("Please fill all required fields.")
-
             return redirect(url_for("pickup_request"))
-
 
         try:
 
             quantity = float(quantity)
 
             if quantity <= 0:
-
                 flash("Quantity must be greater than 0.")
-
                 return redirect(url_for("pickup_request"))
 
         except ValueError:
 
             flash("Please enter a valid quantity.")
-
             return redirect(url_for("pickup_request"))
-
 
         conn = get_db()
 
@@ -324,7 +288,6 @@ def pickup_request():
                 message,
                 status
             )
-
             VALUES (?, ?, ?, ?, ?, ?, 'Pending')
         """, (
             session["user_id"],
@@ -336,30 +299,37 @@ def pickup_request():
         ))
 
         conn.commit()
-
         conn.close()
-
 
         flash("Plastic pickup request submitted successfully!")
 
         return redirect(url_for("dashboard"))
 
-
     return render_template("request.html")
 
 
-# ================= CONTACT =================
+# ---------------- CONTACT ----------------
 
 @app.route("/contact")
 def contact():
-
     return render_template("contact.html")
 
-# ================= ADMIN LOGIN =================
 
-ADMIN_EMAIL = "admin@ecorecycle.com"
-ADMIN_PASSWORD = "admin123"
+# ---------------- USER LOGOUT ----------------
 
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    flash("You have been logged out.")
+
+    return redirect(url_for("index"))
+
+
+# ==================================================
+#                    ADMIN
+# ==================================================
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin_login():
@@ -380,7 +350,7 @@ def admin_login():
     return render_template("admin_login.html")
 
 
-# ================= ADMIN DASHBOARD =================
+# ---------------- ADMIN DASHBOARD ----------------
 
 @app.route("/admin/dashboard")
 def admin_dashboard():
@@ -437,7 +407,7 @@ def admin_dashboard():
     )
 
 
-# ================= COMPLETE PICKUP =================
+# ---------------- COMPLETE PICKUP ----------------
 
 @app.route("/admin/complete/<int:request_id>", methods=["POST"])
 def complete_pickup(request_id):
@@ -461,7 +431,7 @@ def complete_pickup(request_id):
     return redirect(url_for("admin_dashboard"))
 
 
-# ================= ADMIN LOGOUT =================
+# ---------------- ADMIN LOGOUT ----------------
 
 @app.route("/admin/logout")
 def admin_logout():
@@ -469,21 +439,13 @@ def admin_logout():
     session.pop("admin", None)
 
     return redirect(url_for("admin_login"))
-# ================= LOGOUT =================
-
-@app.route("/logout")
-def logout():
-
-    session.clear()
-
-    flash("You have been logged out.")
-
-    return redirect(url_for("index"))
 
 
-# ================= START SERVER =================
-
-create_database()
+# ---------------- RUN APP ----------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )
